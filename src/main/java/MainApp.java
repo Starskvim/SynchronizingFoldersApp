@@ -27,7 +27,7 @@ public class MainApp {
     public void syncStartMethodA(){
         String folder1 = "F:\\test\\folder1";
         String folder2 = "F:\\test\\folder2";
-        
+
         HashSet<File> folder1list = new HashSet<>();
 
         try {
@@ -42,14 +42,17 @@ public class MainApp {
                 String absPathCurrentFile = file.getAbsolutePath();
                 String pathCurrentFile = file.getParent();
 
-                String pathNewFile = pathCurrentFile.replace("F:\\test\\folder1", "F:\\test\\folder2");
-                String absPathNewFile = absPathCurrentFile.replace("F:\\test\\folder1", "F:\\test\\folder2");
-
+                String pathNewFile = pathCurrentFile.replace(folder1, folder2);
+                String absPathNewFile = absPathCurrentFile.replace(folder1, folder2);
 
                 if (Files.exists(Paths.get(pathNewFile)) ) {
                     System.out.println("yes");
 
-                    copyFileUsingStream(file, new File(absPathNewFile));
+                    if (!Files.isRegularFile(Paths.get(absPathNewFile))) {
+                        copyFileUsingStream(file, new File(absPathNewFile));
+                    } else {
+                        System.out.println("skipped " + absPathNewFile);
+                    }
 
                 }else {
                     System.out.println("no");
@@ -60,7 +63,11 @@ public class MainApp {
                         e.printStackTrace();
                     }
 
-                    copyFileUsingStream(file, new File(absPathNewFile));
+                    if (!Files.isRegularFile(Paths.get(absPathNewFile))) {
+                        copyFileUsingStream(file, new File(absPathNewFile));
+                    } else {
+                        System.out.println("skipped " + absPathNewFile);
+                    }
                 }
 
             } catch (IOException e) {
