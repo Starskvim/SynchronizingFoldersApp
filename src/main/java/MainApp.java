@@ -14,21 +14,27 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MainApp {
 
+    private static HashSet<File> folder1list = new HashSet<>();
+    private static HashSet<File> folder2list = new HashSet<>();
+    private static HashSet<String> currentFileABSpath = new HashSet<>();
+
 
     public static void main(String[] args) {
 
-        MainApp mainApp = new MainApp();
-
-        mainApp.syncStartMethodA();
-
-
-    }
-
-    public void syncStartMethodA(){
         String folder1 = "F:\\test\\folder1";
         String folder2 = "F:\\test\\folder2";
 
-        HashSet<File> folder1list = new HashSet<>();
+//        String folder1 = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]";
+//        String folder2 = "D:\\[Patreon]\\[Figure]";
+
+        //syncStartMethodA(folder1, folder2);
+        syncStartMethodB(folder1, folder2);
+
+        System.out.println(" done ");
+
+    }
+
+    public static void syncStartMethodA(String folder1, String folder2){
 
         try {
             folder1list.addAll(startScan(folder1));
@@ -76,42 +82,63 @@ public class MainApp {
         }
     }
 
-    public void syncStartMethodB(){
-        String folder1 = "F:\\test\\folder1";
-        String folder2 = "F:\\test\\folder2";
+    public static void syncStartMethodB(String folder1, String folder2){
 
-
-        HashSet<File> folder1list = new HashSet<>();
-        HashSet<File> folder2list = new HashSet<>();
-
-        try {
-            folder1list.addAll(startScan(folder1));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        syncStartMethodA(folder1, folder2);
 
         try {
             folder2list.addAll(startScan(folder2));
         } catch (IOException e) {
             e.printStackTrace();
         }
-//
-//        folder1list.removeAll(folder2list);
+
+        for (File file: folder1list){
+            currentFileABSpath.add(file.getAbsolutePath());
+        }
+
+        for(File file: folder2list){
+
+            if (!currentFileABSpath.contains(file.getAbsolutePath().replace(folder2, folder1))){
+
+                File fileFolder = new File(file.getParent());
+                if(file.delete()){
+                    System.out.println(file.getName() + " - удален");
+                } else {
+                    System.out.println(file.getName() + " - не удален");
+                }
+                if (fileFolder.delete()){
+                    System.out.println(file.getParent() + " - папка удалена");
+                } {
+                    System.out.println(file.getParent() + " - папка не пуста");
+                }
+
+
+            }
+        }
+
+
+
     }
 
-    public Collection<File> startScan(String adress) throws IOException {
+    public static void syncStartMethodC(String folder1, String folder2){
+
+    }
+
+    public static Collection<File> startScan(String adress) throws IOException {
 
         long start = System.currentTimeMillis();
 
         File adres = new File(adress);
 
         Collection<File> files = FileUtils.streamFiles(adres, true, null).collect(Collectors.toList());
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        for (File file : files) {
 
-            System.out.println(file.getPath() + "--------" + file.getParent() + "--------" + file.getParentFile().getName() + "--------" + FilenameUtils.getExtension(file.getName()));
+//        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+//        for (File file : files) {
+//
+//            System.out.println(file.getPath() + "--------" + file.getParent() + "--------" + file.getParentFile().getName() + "--------" + FilenameUtils.getExtension(file.getName()));
+//
+//        }
 
-        }
         long fin = System.currentTimeMillis();
         System.out.println(fin - start);
 
