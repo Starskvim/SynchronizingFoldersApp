@@ -21,17 +21,20 @@ public class MainApp {
 
     public static void main(String[] args) {
 
-        String folder1 = "F:\\test\\folder1";
-        String folder2 = "F:\\test\\folder2";
+//        String folder1 = "F:\\test\\folder1";
+//        String folder2 = "F:\\test\\folder2";
 
-//        String folder1 = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]";
-//        String folder2 = "D:\\[Patreon]\\[Figure]";
+        String folder1 = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]";
+        String folder2 = "D:\\[Patreon]\\[Figure]";
 
         //syncStartMethodA(folder1, folder2);
         syncStartMethodB(folder1, folder2);
+        //syncStartMethodC(folder1, folder2);
+        //System.out.println(" done ");
 
-        System.out.println(" done ");
 
+        //String fileForMD5 = "F:\\test\\folder1\\11\\1121\\112131\\okas ore glow.zip";
+        //System.out.println(getMD5file(fileForMD5));
     }
 
     public static void syncStartMethodA(String folder1, String folder2){
@@ -108,20 +111,37 @@ public class MainApp {
                 }
                 if (fileFolder.delete()){
                     System.out.println(file.getParent() + " - папка удалена");
-                } {
+                } else  {
                     System.out.println(file.getParent() + " - папка не пуста");
                 }
-
 
             }
         }
 
-
-
     }
 
     public static void syncStartMethodC(String folder1, String folder2){
+        syncStartMethodA(folder1, folder2);
+        folder1list.clear();
+        folder2list.clear();
+        syncStartMethodA(folder2, folder1);
+    }
 
+    public static String getMD5file(String path){
+        String md5 = "";
+        try {
+            try (InputStream is = Files.newInputStream(Paths.get(path))) {
+
+                md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+                System.out.println(md5);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        return md5;
     }
 
     public static Collection<File> startScan(String adress) throws IOException {
@@ -140,7 +160,7 @@ public class MainApp {
 //        }
 
         long fin = System.currentTimeMillis();
-        System.out.println(fin - start);
+        System.out.println("scan time " + (fin - start));
 
         return files;
     }
