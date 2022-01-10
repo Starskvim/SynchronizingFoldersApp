@@ -1,6 +1,6 @@
 # SynchronizingFoldersApp
 Test component for viewer. 
-Copy of Synctoy(microsoft) functionality. No file name control and renaming (yet).
+Copy of Synctoy(microsoft) functionality. With file name control and renaming in B, md5 (not final algorithm).
 
 Method A (Contribute): New files are copied left to right. No deletions. 
 
